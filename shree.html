@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>✨ SHRUTI's 3D BIRTHDAY MAGIC ✨</title>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+  <!-- Three.js for 3D -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.128.0/build/three.module.js"
+      }
+    }
+  </script>
+  
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
+  
+  <!-- Typed.js for typing effect -->
+  <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow-x: hidden;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: white;
+    }
+    
+    /* Floating background particles */
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+    
+    /* Main container */
+    .container {
+      position: relative;
+      z-index: 10;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    /* SPECIAL BIRTHDAY LINK SECTION */
+    .birthday-link-section {
+      text-align: center;
+      margin: 40px 0;
+      padding: 30px;
+      background: rgba(255, 215, 0, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 80px;
+      border: 4px solid #ffd700;
+      box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
+      animation: glowPulse 2s infinite;
+    }
+    
+    @keyframes glowPulse {
+      0% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.3); border-color: #ffd700; }
+      50% { box-shadow: 0 0 80px rgba(255, 215, 0, 0.7); border-color: #fff; }
+      100% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.3); border-color: #ffd700; }
+    }
+    
+    .birthday-link {
+      display: inline-block;
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: #fff;
+      text-decoration: none;
+      padding: 30px 70px;
+      border-radius: 70px;
+      background: linear-gradient(45deg, #ff6b6b, #ffd700, #4ecdc4, #ff6b6b);
+      background-size: 300% 300%;
+      animation: gradientBG 5s ease infinite, float 3s ease-in-out infinite;
+      text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      transition: all 0.3s;
+      border: 3px solid white;
+      letter-spacing: 2px;
+      cursor: pointer;
+    }
+    
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    .birthday-link:hover {
+      transform: scale(1.1) translateY(-10px);
+      box-shadow: 0 30px 60px rgba(255, 215, 0, 0.5);
+      border-color: #ffd700;
+    }
+    
+    .birthday-link i {
+      margin: 0 20px;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(255,255,255,0.5);
+    }
+    
+    .birthday-subtitle {
+      font-size: 1.8rem;
+      margin-top: 20px;
+      color: #ffd700;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      animation: blink 1.5s infinite;
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    
+    /* Link sharing info - FIXED: Now shows instructions to save the file */
+    .share-info {
+      margin-top: 20px;
+      padding: 20px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 50px;
+    }
+    
+    .share-link-box {
+      display: flex;
+      gap: 10px;
+      max-width: 600px;
+      margin: 15px auto;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .share-link-box input {
+      flex: 1;
+      min-width: 300px;
+      padding: 15px 20px;
+      border: 3px solid #ffd700;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      background: white;
+      color: #333;
+    }
+    
+    .copy-btn {
+      background: #ffd700;
+      color: #333;
+      border: none;
+      padding: 15px 35px;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid white;
+    }
+    
+    .copy-btn:hover {
+      transform: scale(1.05);
+      background: #ffed4a;
+      box-shadow: 0 10px 20px rgba(255,215,0,0.4);
+    }
+    
+    /* Download section - NEW */
+    .download-section {
+      background: rgba(255, 215, 0, 0.1);
+      border: 2px dashed #ffd700;
+      border-radius: 30px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    .download-btn {
+      background: #ff6b6b;
+      color: white;
+      font-size: 1.5rem;
+      padding: 20px 40px;
+      border-radius: 60px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+      border: 3px solid white;
+      margin: 10px;
+    }
+    
+    .download-btn:hover {
+      transform: scale(1.1);
+      background: #ff8787;
+      box-shadow: 0 15px 30px rgba(255,107,107,0.5);
+    }
+    
+    /* Header with countdown and instruction link */
+    .header {
+      text-align: center;
+      padding: 30px 20px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      margin-bottom: 30px;
+      border: 1px solid rgba(255,255,255,0.2);
+      position: relative;
+    }
+    
+    .header-buttons {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    
+    .header-btn {
+      background: #ffd700;
+      color: #333;
+      padding: 12px 25px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid white;
+      box-shadow: 0 5px 15px rgba(255,215,0,0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .header-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(255,215,0,0.5);
+      background: #ffed4a;
+    }
+    
+    .countdown {
+      font-size: 3rem;
+      font-weight: bold;
+      text-shadow: 0 0 20px rgba(255,255,255,0.5);
+    }
+    
+    .countdown span {
+      background: rgba(255,255,255,0.2);
+      padding: 10px 20px;
+      border-radius: 10px;
+      margin: 0 5px;
+    }
+    
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      backdrop-filter: blur(5px);
+      animation: fadeIn 0.3s;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .modal-content {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      margin: 5% auto;
+      padding: 40px;
+      border: 3px solid #ffd700;
+      width: 90%;
+      max-width: 800px;
+      border-radius: 30px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      color: white;
+      position: relative;
+      max-height: 80vh;
+      overflow-y: auto;
+      animation: slideIn 0.4s;
+    }
+    
+    @keyframes slideIn {
+      from {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    
+    .close-modal {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: #ffd700;
+      font-size: 35px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    
+    .close-modal:hover {
+      color: white;
+      transform: scale(1.1);
+    }
+    
+    /* 3D Canvas container */
+    #cake-container {
+      width: 100%;
+      height: 400px;
+      margin: 30px 0;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      cursor: grab;
+    }
+    
+    #cake-container:active {
+      cursor: grabbing;
+    }
+    
+    /* Main content grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 25px;
+      margin: 30px 0;
+    }
+    
+    /* Cards */
+    .card {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 25px;
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: transform 0.3s;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+    }
+    
+    /* Typing effect area */
+    #typed-wishes {
+      font-size: 1.5rem;
+      min-height: 100px;
+      color: #ffd700;
+      font-weight: bold;
+    }
+    
+    /* Voice status */
+    .voice-status {
+      background: rgba(0,0,0,0.3);
+      padding: 10px;
+      border-radius: 10px;
+      margin: 10px 0;
+      font-size: 0.9rem;
+    }
+    
+    /* Photo gallery */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 10px;
+      margin-top: 15px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    
+    .photo-item {
+      aspect-ratio: 1;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    /* Fortune teller */
+    .fortune-ball {
+      width: 150px;
+      height: 150px;
+      margin: 20px auto;
+      background: radial-gradient(circle at 30% 30%, #fff, #333);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      cursor: pointer;
+      animation: float 3s ease-in-out infinite;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+      color: #333;
+      font-weight: bold;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    /* Emoji wall */
+    .reaction-wall {
+      min-height: 100px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 10px;
+      padding: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .floating-emoji {
+      position: absolute;
+      animation: floatUp 4s linear forwards;
+      font-size: 2rem;
+      pointer-events: none;
+    }
+    
+    @keyframes floatUp {
+      0% {
+        transform: translateY(100%) scale(0);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100%) scale(1.5);
+        opacity: 0;
+      }
+    }
+    
+    /* Balloons container */
+    .balloons-3d {
+      position: relative;
+      height: 200px;
+      margin: 20px 0;
+    }
+    
+    .balloon {
+      position: absolute;
+      bottom: 0;
+      width: 40px;
+      height: 50px;
+      background: radial-gradient(circle at 30% 30%, #ff6b6b, #c92a2a);
+      border-radius: 50%;
+      animation: balloonFloat 6s ease-in-out infinite;
+      cursor: pointer;
+    }
+    
+    .balloon::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 30px;
+      background: rgba(255,255,255,0.5);
+    }
+    
+    @keyframes balloonFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-30px) rotate(5deg); }
+    }
+    
+    /* Music player */
+    .music-player {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: rgba(0,0,0,0.3);
+      padding: 15px;
+      border-radius: 50px;
+    }
+    
+    .music-player button {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: none;
+      background: #ffd700;
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+    
+    .visualizer {
+      flex: 1;
+      height: 50px;
+      display: flex;
+      gap: 3px;
+      align-items: center;
+    }
+    
+    .visualizer-bar {
+      flex: 1;
+      background: #ffd700;
+      height: 20px;
+      border-radius: 3px;
+      animation: visualizer 0.5s ease-in-out infinite alternate;
+    }
+    
+    @keyframes visualizer {
+      0% { height: 10px; }
+      100% { height: 40px; }
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .countdown { font-size: 2rem; }
+      .grid { grid-template-columns: 1fr; }
+      .header-buttons {
+        position: relative;
+        top: 0;
+        right: 0;
+        justify-content: center;
+        margin-top: 20px;
+      }
+      .modal-content {
+        margin: 2% auto;
+        padding: 20px;
+        width: 95%;
+      }
+      .birthday-link {
+        font-size: 2rem;
+        padding: 20px 30px;
+      }
+      .birthday-subtitle {
+        font-size: 1.2rem;
+      }
+    }
+    
+    /* Buttons */
+    .btn {
+      background: #ffd700;
+      color: #333;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      margin: 5px;
+      transition: all 0.3s;
+      font-weight: bold;
+    }
+    
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(255,215,0,0.4);
+    }
+    
+    /* Upload area */
+    .upload-area {
+      border: 2px dashed rgba(255,255,255,0.3);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      margin: 10px 0;
+    }
+    
+    .upload-area:hover {
+      border-color: #ffd700;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particle-canvas"></canvas>
+  
+  <!-- Instruction Modal -->
+  <div id="instructionModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeInstructions()">&times;</span>
+      <h2><i class="fas fa-star"></i> Welcome to Your Birthday Magic! <i class="fas fa-star"></i></h2>
+      
+      <div class="instruction-section">
+        <h3><i class="fas fa-crown"></i> Dear Shruti,</h3>
+        <p style="font-size: 1.2rem; margin-bottom: 15px;">This magical birthday website is made especially for YOU!</p>
+      </div>
+      
+      <!-- FIXED: Clear instructions on how to share -->
+      <div class="download-section">
+        <h3 style="color: #ffd700; font-size: 2rem;">📱 HOW TO SHARE:</h3>
+        <p style="font-size: 1.3rem; margin: 20px 0;">Save this HTML file and send it to Shruti. When she opens it, she'll see the magic!</p>
+        <button class="download-btn" onclick="downloadHTML()">
+          <i class="fas fa-download"></i> SAVE THIS PAGE
+        </button>
+        <p style="margin-top: 15px; font-size: 1.1rem;">Click the button above to save this file, then send it to Shruti!</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="container">
+    <!-- Header with countdown and instruction link -->
+    <div class="header">
+      <div class="header-buttons">
+        <a href="javascript:void(0)" class="header-btn" onclick="openInstructions()">
+          <i class="fas fa-info-circle"></i> How to Share
+        </a>
+      </div>
+      <h1 style="font-size: 4rem; margin-bottom: 20px;">🎉 SHRUTI 🎉</h1>
+      <div class="countdown" id="countdown"></div>
+      <p style="font-size: 1.5rem; margin-top: 20px;">until your special day!</p>
+    </div>
+    
+    <!-- SPECIAL BIRTHDAY LINK SECTION - FIXED: Now works without internet -->
+    <div class="birthday-link-section">
+      <a href="#" class="birthday-link" onclick="openBirthdayMagic(); return false;">
+        <i class="fas fa-star"></i> ✨ CLICK FOR BIRTHDAY MAGIC ✨ <i class="fas fa-star"></i>
+      </a>
+      <div class="birthday-subtitle">
+        <i class="fas fa-hand-point-up"></i> Shruti, click here to start your birthday celebration! <i class="fas fa-hand-point-up"></i>
+      </div>
+      
+      <!-- FIXED: Now shows how to share the file -->
+      <div class="share-info">
+        <p style="font-size: 1.3rem; margin-bottom: 15px;">
+          <i class="fas fa-share-alt"></i> To share this with Shruti:
+        </p>
+        <div class="share-link-box">
+          <input type="text" id="magicLink" value="💾 Save this HTML file and send it to Shruti" readonly>
+          <button class="copy-btn" onclick="showSaveInstructions()">
+            <i class="fas fa-save"></i> How to Save
+          </button>
+        </div>
+        <p style="font-size: 1rem; margin-top: 10px; color: #ffd700;">
+          <i class="fas fa-info-circle"></i> This is a file, not a website. Save it and send to Shruti!
+        </p>
+      </div>
+    </div>
+    
+    <!-- 3D Cake Container -->
+    <div id="cake-container"></div>
+    
+    <!-- Voice Status -->
+    <div class="voice-status" id="voiceStatus">
+      <i class="fas fa-microphone"></i> Say "blow" or "happy birthday" to interact
+    </div>
+    
+    <!-- Main Grid -->
+    <div class="grid">
+      <!-- Typed Wishes Card -->
+      <div class="card">
+        <h2><i class="fas fa-pencil-alt"></i> Birthday Wishes</h2>
+        <div id="typed-wishes"></div>
+      </div>
+      
+      <!-- Music Player Card -->
+      <div class="card">
+        <h2><i class="fas fa-music"></i> Birthday Song</h2>
+        <div class="music-player">
+          <button id="playPauseBtn"><i class="fas fa-play"></i></button>
+          <div class="visualizer" id="visualizer">
+            <div class="visualizer-bar" style="animation-delay: 0s;"></div>
+            <div class="visualizer-bar" style="animation-delay: 0.1s;"></div>
+            <div class="visualizer-bar" style="animation-delay: 0.2s;"></div>
+            <div class="visualizer-bar" style="animation-delay: 0.3s;"></div>
+            <div class="visualizer-bar" style="animation-delay: 0.4s;"></div>
+          </div>
+        </div>
+        <audio id="birthdaySong" loop>
+          <source src="data:audio/mp3;base64,//uQxAAAAAAAAAAAAAAAAAAAAAA..." type="audio/mp3">
+        </audio>
+        <p style="margin-top: 10px;">🎵 Happy Birthday instrumental</p>
+      </div>
+      
+      <!-- Fortune Teller Card -->
+      <div class="card">
+        <h2><i class="fas fa-crystal-ball"></i> Fortune Teller</h2>
+        <div class="fortune-ball" id="fortuneBall" onclick="tellFortune()">
+          Ask me about your future
+        </div>
+        <p style="text-align: center; margin-top: 10px;" id="fortuneAnswer"></p>
+      </div>
+      
+      <!-- Photo Gallery Card -->
+      <div class="card">
+        <h2><i class="fas fa-images"></i> Birthday Gallery</h2>
+        <div class="upload-area" id="uploadArea" onclick="document.getElementById('photoInput').click()">
+          <i class="fas fa-cloud-upload-alt" style="font-size: 2rem;"></i>
+          <p>Click to upload photos</p>
+          <input type="file" id="photoInput" accept="image/*" multiple style="display: none;">
+        </div>
+        <div class="photo-grid" id="photoGallery"></div>
+      </div>
+      
+      <!-- Reaction Wall Card -->
+      <div class="card">
+        <h2><i class="fas fa-heart"></i> Send Love</h2>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
+          <button class="btn" onclick="addReaction('❤️')">❤️</button>
+          <button class="btn" onclick="addReaction('🎂')">🎂</button>
+          <button class="btn" onclick="addReaction('🎈')">🎈</button>
+          <button class="btn" onclick="addReaction('✨')">✨</button>
+          <button class="btn" onclick="addReaction('🌟')">🌟</button>
+        </div>
+        <div class="reaction-wall" id="reactionWall"></div>
+      </div>
+      
+      <!-- Balloons Card -->
+      <div class="card">
+        <h2><i class="fas fa-balloon"></i> Magic Balloons</h2>
+        <div class="balloons-3d" id="balloonContainer"></div>
+        <button class="btn" onclick="addBalloon()" style="width: 100%;">Add Balloon</button>
+      </div>
+    </div>
+    
+    <!-- Blow Candle Button -->
+    <div style="text-align: center; margin: 30px 0;">
+      <button class="btn" onclick="blowCandle()" style="font-size: 1.5rem; padding: 20px 40px;">
+        <i class="fas fa-wind"></i> Simulate Blow Candle <i class="fas fa-wind"></i>
+      </button>
+    </div>
+  </div>
+
+  <script type="module">
+    // ==================== 3D CAKE (Three.js) ====================
+    import * as THREE from 'three';
+    import { OrbitControls } from 'https://unpkg.com/three@0.128.0/examples/jsm/controls/OrbitControls.js';
+    
+    // Setup scene
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x1a1a2e);
+    
+    const camera = new THREE.PerspectiveCamera(45, document.getElementById('cake-container').clientWidth / 400, 0.1, 1000);
+    camera.position.set(5, 3, 8);
+    
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    renderer.setSize(document.getElementById('cake-container').clientWidth, 400);
+    renderer.shadowMap.enabled = true;
+    document.getElementById('cake-container').appendChild(renderer.domElement);
+    
+    // Controls
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 2;
+    controls.enableZoom = true;
+    controls.maxPolarAngle = Math.PI / 2;
+    
+    // Lights
+    const ambientLight = new THREE.AmbientLight(0x404060);
+    scene.add(ambientLight);
+    
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+    dirLight.position.set(2, 5, 3);
+    dirLight.castShadow = true;
+    scene.add(dirLight);
+    
+    const backLight = new THREE.PointLight(0xffaa00, 0.5);
+    backLight.position.set(-2, 2, -3);
+    scene.add(backLight);
+    
+    // Create cake
+    function createCake() {
+      // Cake base (bottom layer)
+      const bottomGeo = new THREE.CylinderGeometry(2, 2, 0.8, 32);
+      const bottomMat = new THREE.MeshStandardMaterial({ color: 0x8b4513, emissive: 0x331100 });
+      const bottomLayer = new THREE.Mesh(bottomGeo, bottomMat);
+      bottomLayer.position.y = 0.4;
+      bottomLayer.castShadow = true;
+      bottomLayer.receiveShadow = true;
+      scene.add(bottomLayer);
+      
+      // Middle layer
+      const middleGeo = new THREE.CylinderGeometry(1.6, 1.6, 0.8, 32);
+      const middleMat = new THREE.MeshStandardMaterial({ color: 0xd2691e, emissive: 0x442200 });
+      const middleLayer = new THREE.Mesh(middleGeo, middleMat);
+      middleLayer.position.y = 1.2;
+      middleLayer.castShadow = true;
+      middleLayer.receiveShadow = true;
+      scene.add(middleLayer);
+      
+      // Top layer
+      const topGeo = new THREE.CylinderGeometry(1.2, 1.2, 0.8, 32);
+      const topMat = new THREE.MeshStandardMaterial({ color: 0xffa07a, emissive: 0x552200 });
+      const topLayer = new THREE.Mesh(topGeo, topMat);
+      topLayer.position.y = 2.0;
+      topLayer.castShadow = true;
+      topLayer.receiveShadow = true;
+      scene.add(topLayer);
+      
+      // Icing drips
+      for (let i = 0; i < 8; i++) {
+        const angle = (i / 8) * Math.PI * 2;
+        const dripGeo = new THREE.SphereGeometry(0.2, 8);
+        const dripMat = new THREE.MeshStandardMaterial({ color: 0xfff0f0 });
+        const drip = new THREE.Mesh(dripGeo, dripMat);
+        drip.position.set(Math.sin(angle) * 1.8, 2.3, Math.cos(angle) * 1.8);
+        scene.add(drip);
+      }
+      
+      // Candles
+      const candlePositions = [
+        [-0.5, 2.5, 0.5],
+        [0.5, 2.5, -0.5],
+        [0, 2.5, 0],
+        [-0.3, 2.5, -0.5],
+        [0.4, 2.5, 0.4]
+      ];
+      
+      candlePositions.forEach(pos => {
+        // Candle stick
+        const candleGeo = new THREE.CylinderGeometry(0.1, 0.1, 0.6, 8);
+        const candleMat = new THREE.MeshStandardMaterial({ color: 0xff69b4 });
+        const candle = new THREE.Mesh(candleGeo, candleMat);
+        candle.position.set(pos[0], pos[1] + 0.3, pos[2]);
+        candle.castShadow = true;
+        scene.add(candle);
+        
+        // Flame (will be animated)
+        const flameGeo = new THREE.ConeGeometry(0.15, 0.3, 8);
+        const flameMat = new THREE.MeshStandardMaterial({ color: 0xffaa00, emissive: 0xff4400 });
+        const flame = new THREE.Mesh(flameGeo, flameMat);
+        flame.position.set(pos[0], pos[1] + 0.7, pos[2]);
+        flame.castShadow = true;
+        scene.add(flame);
+      });
+      
+      // Sprinkles
+      for (let i = 0; i < 50; i++) {
+        const sprinkleGeo = new THREE.SphereGeometry(0.05, 4);
+        const sprinkleMat = new THREE.MeshStandardMaterial({ color: Math.random() * 0xffffff });
+        const sprinkle = new THREE.Mesh(sprinkleGeo, sprinkleMat);
+        sprinkle.position.set(
+          (Math.random() - 0.5) * 3,
+          Math.random() * 2.5,
+          (Math.random() - 0.5) * 3
+        );
+        scene.add(sprinkle);
+      }
+    }
+    
+    createCake();
+    
+    // Animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+    
+    // Handle resize
+    window.addEventListener('resize', () => {
+      const width = document.getElementById('cake-container').clientWidth;
+      renderer.setSize(width, 400);
+      camera.aspect = width / 400;
+      camera.updateProjectionMatrix();
+    });
+    
+    // ==================== PARTICLE BACKGROUND ====================
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    
+    const particles = [];
+    for (let i = 0; i < 100; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 3 + 1,
+        speedX: (Math.random() - 0.5) * 0.5,
+        speedY: (Math.random() - 0.5) * 0.5,
+        color: `rgba(255, 215, 0, ${Math.random() * 0.5})`
+      });
+    }
+    
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      particles.forEach(p => {
+        p.x += p.speedX;
+        p.y += p.speedY;
+        
+        if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+        
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+      });
+      
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+  </script>
+
+  <script>
+    // ==================== MODAL FUNCTIONS ====================
+    function openInstructions() {
+      document.getElementById('instructionModal').style.display = 'block';
+    }
+    
+    function closeInstructions() {
+      document.getElementById('instructionModal').style.display = 'none';
+    }
+    
+    window.onclick = function(event) {
+      const instrModal = document.getElementById('instructionModal');
+      if (event.target == instrModal) {
+        instrModal.style.display = 'none';
+      }
+    }
+    
+    // ==================== FIXED: SHOW SAVE INSTRUCTIONS ====================
+    function showSaveInstructions() {
+      alert('📁 HOW TO SAVE:\n\n1. In your browser, go to File → Save Page As\n2. Save as "Shruti Birthday.html"\n3. Send this file to Shruti!\n\nShe can open it anytime to see the magic!');
+      
+      // Mini confetti
+      confetti({
+        particleCount: 30,
+        spread: 50,
+        origin: { y: 0.6 }
+      });
+    }
+    
+    // ==================== DOWNLOAD HTML FUNCTION ====================
+    function downloadHTML() {
+      // This creates a download of the current HTML file
+      const htmlContent = document.documentElement.outerHTML;
+      const blob = new Blob([htmlContent], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'Shruti_Birthday_Magic.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      // Show success message
+      alert('✨ File saved! Now you can send this file to Shruti! ✨');
+      
+      // Celebration
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+    }
+    
+    // ==================== BIRTHDAY MAGIC OPENER ====================
+    function openBirthdayMagic() {
+      // Scroll to top
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+      
+      // Massive confetti celebration
+      for (let i = 0; i < 3; i++) {
+        setTimeout(() => {
+          confetti({
+            particleCount: 150,
+            spread: 100,
+            origin: { y: 0.6 },
+            startVelocity: 30,
+            colors: ['#ffd700', '#ff6b6b', '#4ecdc4', '#45b7d1', '#ff9ff3']
+          });
+        }, i * 200);
+      }
+      
+      // Welcome message
+      const welcomeMsg = document.createElement('div');
+      welcomeMsg.style.position = 'fixed';
+      welcomeMsg.style.top = '50%';
+      welcomeMsg.style.left = '50%';
+      welcomeMsg.style.transform = 'translate(-50%, -50%)';
+      welcomeMsg.style.background = 'linear-gradient(135deg, #ff6b6b, #4ecdc4, #ffd700)';
+      welcomeMsg.style.padding = '40px 60px';
+      welcomeMsg.style.borderRadius = '50px';
+      welcomeMsg.style.border = '5px solid white';
+      welcomeMsg.style.boxShadow = '0 0 100px rgba(255,215,0,0.8)';
+      welcomeMsg.style.zIndex = '2000';
+      welcomeMsg.style.textAlign = 'center';
+      welcomeMsg.style.animation = 'popIn 0.5s';
+      welcomeMsg.innerHTML = `
+        <h1 style="font-size: 4rem; margin-bottom: 20px;">🎉✨🎂</h1>
+        <h2 style="color: white; font-size: 3rem;">HAPPY BIRTHDAY</h2>
+        <h1 style="color: #ffd700; font-size: 5rem;">SHRUTI!</h1>
+      `;
+      document.body.appendChild(welcomeMsg);
+      
+      // Add pop animation
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes popIn {
+          0% { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+          100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+      `;
+      document.head.appendChild(style);
+      
+      // Remove message
+      setTimeout(() => welcomeMsg.remove(), 3000);
+      
+      // Add floating reactions
+      for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+          addReaction(['🎉', '🎂', '🎈', '✨', '🌟', '💝'][Math.floor(Math.random() * 6)]);
+        }, i * 100);
+      }
+      
+      // Auto-play music
+      try {
+        const audio = document.getElementById('birthdaySong');
+        audio.play();
+        document.getElementById('playPauseBtn').innerHTML = '<i class="fas fa-pause"></i>';
+        isPlaying = true;
+      } catch(e) {}
+    }
+    
+    // Auto celebration on load
+    window.addEventListener('load', function() {
+      setTimeout(() => {
+        confetti({
+          particleCount: 50,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }, 500);
+    });
+    
+    // ==================== TYPED WISHES ====================
+    var typed = new Typed('#typed-wishes', {
+      strings: [
+        'Dear Shruti...',
+        'You are amazing!',
+        'Happy Birthday!'
+      ],
+      typeSpeed: 50,
+      backSpeed: 30,
+      loop: true
+    });
+    
+    // ==================== COUNTDOWN TIMER ====================
+    function updateCountdown() {
+      const now = new Date();
+      const birthday = new Date(now.getFullYear(), 1, 19);
+      
+      if (now > birthday) {
+        birthday.setFullYear(birthday.getFullYear() + 1);
+      }
+      
+      const diff = birthday - now;
+      
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      
+      document.getElementById('countdown').innerHTML = `
+        <span>${days}d</span>
+        <span>${hours}h</span>
+        <span>${minutes}m</span>
+        <span>${seconds}s</span>
+      `;
+    }
+    setInterval(updateCountdown, 1000);
+    
+    // ==================== VOICE RECOGNITION ====================
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      
+      recognition.onresult = (event) => {
+        const last = event.results.length - 1;
+        const text = event.results[last][0].transcript.toLowerCase();
+        document.getElementById('voiceStatus').innerHTML = `<i class="fas fa-microphone"></i> You said: "${text}"`;
+        
+        if (text.includes('blow')) blowCandle();
+        else if (text.includes('happy birthday')) {
+          confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
+          addReaction('🎉');
+        }
+      };
+      
+      recognition.start();
+    }
+    
+    // ==================== BLOW CANDLE ====================
+    function blowCandle() {
+      confetti({
+        particleCount: 150,
+        spread: 100,
+        origin: { y: 0.6 },
+        colors: ['#ffd700', '#ff6b6b', '#4ecdc4']
+      });
+      document.getElementById('fortuneAnswer').innerHTML = '🎂 Wish granted! 🎂';
+      addReaction('🕯️');
+    }
+    
+    // ==================== FORTUNE TELLER ====================
+    function tellFortune() {
+      const fortunes = [
+        "Amazing opportunities await!",
+        "A surprise is coming!",
+        "Today will be magical!",
+        "Your wish will come true!"
+      ];
+      
+      const ball = document.getElementById('fortuneBall');
+      ball.style.animation = 'shake 0.5s ease-in-out';
+      setTimeout(() => {
+        ball.style.animation = 'float 3s ease-in-out infinite';
+      }, 500);
+      
+      document.getElementById('fortuneAnswer').innerHTML = 
+        fortunes[Math.floor(Math.random() * fortunes.length)];
+    }
+    
+    // Shake animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes shake {
+        0%, 100% { transform: rotate(0deg); }
+        25% { transform: rotate(10deg); }
+        75% { transform: rotate(-10deg); }
+      }
+    `;
+    document.head.appendChild(style);
+    
+    // ==================== PHOTO GALLERY ====================
+    document.getElementById('photoInput').addEventListener('change', function(e) {
+      const files = Array.from(e.target.files);
+      const gallery = document.getElementById('photoGallery');
+      
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const div = document.createElement('div');
+          div.className = 'photo-item';
+          div.innerHTML = `<img src="${e.target.result}" alt="Birthday photo">`;
+          gallery.appendChild(div);
+          
+          const photos = JSON.parse(localStorage.getItem('shrutiPhotos') || '[]');
+          photos.push(e.target.result);
+          localStorage.setItem('shrutiPhotos', JSON.stringify(photos));
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+    
+    function loadPhotos() {
+      const photos = JSON.parse(localStorage.getItem('shrutiPhotos') || '[]');
+      const gallery = document.getElementById('photoGallery');
+      photos.forEach(photo => {
+        const div = document.createElement('div');
+        div.className = 'photo-item';
+        div.innerHTML = `<img src="${photo}" alt="Birthday photo">`;
+        gallery.appendChild(div);
+      });
+    }
+    loadPhotos();
+    
+    // ==================== REACTION WALL ====================
+    function addReaction(emoji) {
+      const wall = document.getElementById('reactionWall');
+      const div = document.createElement('div');
+      div.className = 'floating-emoji';
+      div.style.left = Math.random() * 100 + '%';
+      div.style.animationDuration = (Math.random() * 2 + 3) + 's';
+      div.textContent = emoji;
+      wall.appendChild(div);
+      setTimeout(() => div.remove(), 4000);
+    }
+    
+    // ==================== BALLOONS ====================
+    function addBalloon() {
+      const container = document.getElementById('balloonContainer');
+      const balloon = document.createElement('div');
+      balloon.className = 'balloon';
+      
+      const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7'];
+      balloon.style.background = `radial-gradient(circle at 30% 30%, ${colors[Math.floor(Math.random() * colors.length)]}, #c92a2a)`;
+      balloon.style.left = Math.random() * 80 + '%';
+      
+      balloon.onclick = function() {
+        this.remove();
+        confetti({ particleCount: 20, spread: 50, origin: { y: 0.5 } });
+        addReaction('🎈');
+      };
+      
+      container.appendChild(balloon);
+      setTimeout(() => balloon.remove(), 10000);
+    }
+    
+    for (let i = 0; i < 5; i++) {
+      setTimeout(addBalloon, i * 500);
+    }
+    
+    // ==================== MUSIC PLAYER ====================
+    let isPlaying = false;
+    const audio = document.getElementById('birthdaySong');
+    const playBtn = document.getElementById('playPauseBtn');
+    
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const analyser = audioContext.createAnalyser();
+    const source = audioContext.createMediaElementSource(audio);
+    source.connect(analyser);
+    analyser.connect(audioContext.destination);
+    
+    analyser.fftSize = 64;
+    const dataArray = new Uint8Array(analyser.frequencyBinCount);
+    
+    function updateVisualizer() {
+      requestAnimationFrame(updateVisualizer);
+      if (isPlaying) {
+        analyser.getByteFrequencyData(dataArray);
+        document.querySelectorAll('.visualizer-bar').forEach((bar, i) => {
+          bar.style.height = (dataArray[i] / 255 * 40) + 'px';
+        });
+      }
+    }
+    updateVisualizer();
+    
+    playBtn.onclick = () => {
+      if (isPlaying) {
+        audio.pause();
+        playBtn.innerHTML = '<i class="fas fa-play"></i>';
+      } else {
+        audio.play();
+        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+      }
+      isPlaying = !isPlaying;
+    };
+  </script>
+</body>
+</html>
